@@ -1,10 +1,18 @@
 const express = require('express')
 const { GetPassword } = require('./dao/users')
-const { GetAvgEuis, GetBuildings } = require('./dao/buildings')
+const { GetAvgEuis, GetBuildings, CountBuildings } = require('./dao/buildings')
 const { ConnectSQL } = require("./connector/mysql_connector")
 const timeUtils = require("./utils/time");
+const cors = require('cors');
+
 const app = express()
-const port = 3000
+const port = 3001
+
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));  // But this will be overriden if using ngrok
 
 var bodyParser = require('body-parser')
 // parse application/json
@@ -26,7 +34,8 @@ app.get('/buildings', async (req, res) => {
     try {
         console.log(`API: ${API}; req=${JSON.stringify(req.query)}`);
         const buildings = await GetBuildings(offset, limit)
-        results = { buildings }
+        const count = await CountBuildings();
+        results = { buildings, totalCount: count }
         res.json({
             results: results,
             ts: timeUtils.TimeNowStr(),
@@ -35,8 +44,6 @@ app.get('/buildings', async (req, res) => {
     catch (err) {
         console.log(`err=${err.stack.toString()}`);
         res.status(500).send(err.toString());
-    } finally {
-        console.log(`API: ${API}; res=${JSON.stringify(res)}`);
     }
 })
 
@@ -44,8 +51,7 @@ app.get('/avgEuisByPropertyType', async (req, res) => {
     const API = '/avgEuisByPropertyType'
     try {
         console.log(`API: ${API}; req=${JSON.stringify(req.query)}`);
-        const avgEuis = await GetAvgEuis();
-        results = { avgEuis }
+        const results = await GetAvgEuis();
         res.json({
             results: results,
             ts: timeUtils.TimeNowStr(),
@@ -54,8 +60,6 @@ app.get('/avgEuisByPropertyType', async (req, res) => {
     catch (err) {
         console.log(`err=${err.stack.toString()}`);
         res.status(500).send(err.toString());
-    } finally {
-        console.log(`API: ${API}; res=${JSON.stringify(res)}`);
     }
 })
 

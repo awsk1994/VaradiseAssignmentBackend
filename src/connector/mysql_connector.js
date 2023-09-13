@@ -11,7 +11,7 @@ function ConnectSQL() {
         password: config.mysql.password,
         database: config.mysql.database,
         timezone: 'Asia/Shanghai',
-        connectionLimit: 5,
+        connectionLimit: 50,
     });
 }
 
