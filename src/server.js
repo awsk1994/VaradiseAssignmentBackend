@@ -40,10 +40,10 @@ app.get('/buildings', async (req, res) => {
     }
 })
 
-app.get('/charts/avgEuisByPropertyType', async (req, res) => {
-    const API = '/buildings/avgEuisByPropertyType'
+app.get('/avgEuisByPropertyType', async (req, res) => {
+    const API = '/avgEuisByPropertyType'
     try {
-        console.log(`API: ${API}; req=${JSON.stringify(req.body)}`);
+        console.log(`API: ${API}; req=${JSON.stringify(req.query)}`);
         const avgEuis = await GetAvgEuis();
         results = { avgEuis }
         res.json({

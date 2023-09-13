@@ -1,7 +1,7 @@
 const { Query } = require('../connector/mysql_connector');
 
 async function GetBuildings(offset, limit) {
-  let sql = `select * from buildings OFFSET ${offset} LIMIT ${limit}`
+  let sql = `select * from buildings LIMIT ${limit} OFFSET ${offset}`
   return await Query(sql);
 }
 
