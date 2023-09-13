@@ -4,3 +4,6 @@
 
  - schema; add foreign key
  - server.js: dry optimization
+ - authentication
+ - server index
+ 

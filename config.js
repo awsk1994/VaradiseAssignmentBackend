@@ -4,7 +4,7 @@ module.exports = {
         port: '23915',
         user: 'root',
         password: 'Apple12321!',
-        database: 'dev_env',
+        database: 'varadise',
     },
     // deploy: {
     //     port: 3000, // PROD: 3000, TEST: 3001

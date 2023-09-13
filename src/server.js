@@ -1,8 +1,17 @@
 const express = require('express')
 const { GetPassword } = require('./dao/users')
 const { GetAvgEuis, GetBuildings } = require('./dao/buildings')
+const { ConnectSQL } = require("./connector/mysql_connector")
+const timeUtils = require("./utils/time");
 const app = express()
 const port = 3000
+
+var bodyParser = require('body-parser')
+// parse application/json
+app.use(bodyParser.json())
+
+// INIT
+ConnectSQL();
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -50,14 +59,12 @@ app.get('/charts/avgEuisByPropertyType', async (req, res) => {
     }
 })
 
-app.post('/users/login', async (req, res) => {
-    const API = '/user/login'
+app.post('/login', async (req, res) => {
+    const API = '/login'
     try {
-        console.log(`API: ${API}; req=${JSON.stringify(req.body)}`);
-
-        if (req.body.username == "") {
+        if (!req.body.username || req.body.username == "") {
             res.status(500).send("ERROR: missing username");    // TODO: fix
-        } else if (req.body.password == "") {
+        } else if (!req.body.password || req.body.password == "") {
             res.status(500).send("ERROR: missing password");  // TODO: fix
         } else {
             const password = await GetPassword(req.body.username);
@@ -83,8 +90,6 @@ app.post('/users/login', async (req, res) => {
     catch (err) {
         console.log(`err=${err.stack.toString()}`);
         res.status(500).send(err.toString());
-    } finally {
-        console.log(`API: ${API}; res=${JSON.stringify(res)}`);
     }
 })
 

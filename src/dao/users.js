@@ -1,7 +1,7 @@
-const { Query } = require('../connector/mysql');
+const { Query } = require('../connector/mysql_connector');
 
 async function GetPassword(username) {
-    let sql = `SELECT password FROM accounts WHERE username='${username}'`;
+    let sql = `SELECT password FROM users WHERE username='${username}'`;
     const results = await Query(sql);
     if(results.length > 1) {
         throw new Error(`Found more than 1 user with username ${username}`)

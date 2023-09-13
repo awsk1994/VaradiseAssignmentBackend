@@ -1,4 +1,4 @@
-const { Query } = require('../connector/mysql');
+const { Query } = require('../connector/mysql_connector');
 
 async function GetBuildings(offset, limit) {
   let sql = `select * from buildings OFFSET ${offset} LIMIT ${limit}`

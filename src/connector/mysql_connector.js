@@ -1,6 +1,5 @@
 const mysql = require('mysql'); // faster clothing might be taken by other people...
-const config = require('./config');
-const logger = require('./utils/logging');
+const config = require('../../config');
 
 let pool;
 
@@ -17,11 +16,11 @@ function ConnectSQL() {
 }
 
 function DisconnectSQL() {
-    logger.info("Disconnecting SQL pool...");
+    console.log("Disconnecting SQL pool...");
     pool.end(function (err) {
         if (err) {
-            logger.error(`Pool End error: ${err.toString()}`);
-            logger.error(err.stack.toString());
+            console.log(`Pool End error: ${err.toString()}`);
+            console.log(err.stack.toString());
         }
     });
 }
@@ -30,15 +29,15 @@ async function Query(sql) {
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
             if (err) {
-                logger.error(`Get Pool Connetion error: ${err.toString()}`);
-                logger.error(err.stack.toString());
+                console.log(`Get Pool Connetion error: ${err.toString()}`);
+                console.log(err.stack.toString());
                 reject(err);
             }
-            logger.info(`sql: ${sql}`);
+            console.log(`sql: ${sql}`);
             query2(sql, connection)
                 .then(res => {
-                    logger.info(`SQL results length: ${res.length}`);
-                    logger.debug(`SQL result: ${JSON.stringify(res)} || SQL: ${sql}`);
+                    console.log(`SQL results length: ${res.length}`);
+                    console.log(`SQL result: ${JSON.stringify(res)} || SQL: ${sql}`);
                     resolve(res);
                 })
                 .catch(err => reject(err));
@@ -50,7 +49,7 @@ function query2(sql, connection) {
     return new Promise((resolve, reject) => {
         connection.query(sql, (error, results) => {
             if (error) {
-                logger.error(`SQL Query2 error: ${error.toString()} | ${error.stack.toString()}`);
+                console.log(`SQL Query2 error: ${error.toString()} | ${error.stack.toString()}`);
                 reject(error);
             } else {
                 resolve(results);
@@ -64,14 +63,14 @@ async function Modify(sql) {
     return new Promise((resolve, reject) => {
         pool.getConnection(function (err, connection) {
             if (err) {
-                logger.error(`Get Pool Connetion error: ${err.toString()}`);
-                logger.error(err.stack.toString());
+                console.log(`Get Pool Connetion error: ${err.toString()}`);
+                console.log(err.stack.toString());
                 reject(err);
             }
-            logger.info(`sql: ${sql}`);
+            console.log(`sql: ${sql}`);
             query2(sql, connection)
                 .then(res => {
-                    logger.info(`SQL Affected Rows: ${res.affectedRows}`);
+                    console.log(`SQL Affected Rows: ${res.affectedRows}`);
                     resolve(res);
                 })
                 .catch(err => reject(err));
@@ -97,7 +96,7 @@ async function ModifyOne(sql) {
         err = "Unknown error";
     }
     msg = `ModifyOne error: sql=${sql}, error=${err}, db rsp=${JSON.stringify(results)}`;
-    logger.error(`SQL Modify error: ${err.toString()} | ${err.stack.toString()}`);
+    console.log(`SQL Modify error: ${err.toString()} | ${err.stack.toString()}`);
     throw new Error(msg);
 }
 
