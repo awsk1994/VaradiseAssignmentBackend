@@ -1,27 +1,25 @@
 CREATE TABLE Buildings (
   OSEBuildingID INT AUTO_INCREMENT PRIMARY KEY,
   PrimaryPropertyType VARCHAR(255),
-  BuildingInfo TEXT,
+  BuildingInfo VARCHAR(255),
   BuildingLocation VARCHAR(255)
 );
 
 CREATE TABLE Buildings_gfa (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   OSEBuildingID INT,
-  PropertyUseTypeGFA INT,
---   PRIMARY KEY (OSEBuildingID, PropertyUseTypeGFA),
---   FOREIGN KEY (OSEBuildingID) REFERENCES Buildings(OSEBuildingID)
+  PropertyUseTypeGFA INT
 );
 
 CREATE TABLE Metrics (
-  id INT PRIMARY KEY,
-  OSEBuildingID INT AUTO_INCREMENT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  OSEBuildingID INT UNIQUE,
   Metric VARCHAR(255),
-  Value INT,
+  Value INT
 );
 
 CREATE TABLE Users (
-  id INT PRIMARY KEY,
-  Login VARCHAR(255) PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  Username VARCHAR(255) UNIQUE,
   Password VARCHAR(255)
 );
